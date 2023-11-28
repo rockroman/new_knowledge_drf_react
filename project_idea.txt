@@ -1,0 +1,19 @@
+Im about to start creating a project that will be a django rest API and react frontend and Im sketching the entity relat. diagram for models.
+so flow of the app should be like this:
+1. two types of users(MENTOR AND STUDENT) -here I wouldnt like to go with custom user modelif its nor neccessery since I never worked with it but you can provide suggestion later.
+so after logging in user will have to choose his role(or type of user)
+
+
+2. based on type of user there would be different functionality: so MENTOR user will have functionality to create a lesson within few LEARNING_CATEGORIES,
+ALL CRUD functionality included, there would be different fields in lesson model,
+
+
+3. each user would have a Profile, so (another model) and inbox(another model) 
+
+
+4. inbox would work on functionality is the user FOLLOWED so (another model) and if user is following another user they can communicate through a inbox messages if not they cant
+
+
+5. each user would have a functionality to like and comment lesson  but only a lesson of category they have selected in their profile
+
+6. only mentors would have functionality to create a lesson(only in category they have in their profile also) , so students can only view it comment it and communicate with mentor if they are following him
