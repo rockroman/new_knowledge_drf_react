@@ -17,3 +17,17 @@ ALL CRUD functionality included, there would be different fields in lesson model
 5. each user would have a functionality to like and comment lesson  but only a lesson of category they have selected in their profile
 
 6. only mentors would have functionality to create a lesson(only in category they have in their profile also) , so students can only view it comment it and communicate with mentor if they are following him
+
+
+
+
+# Imports
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 3rd party:
+
+
+# Internal:
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
