@@ -36,24 +36,31 @@ class Profile(models.Model):
     def __str__(self) -> str:
         return f"{self.owner}'s profile"
     
+    def save(self, *args, **kwargs):
+        if self.role and not self.role_selected:
+            self.role_selected = True
+
+        super().save(*args, **kwargs)
+    
 
 
     
-@receiver(post_save, sender=User)
-def create_user_profile(sender,instance,created,**kwargs):
-    if created:
-        profile = Profile.objects.create(owner=instance)
-        # assigning the newly created user username and email 
-        # to profile fields
-        profile.first_name = instance.username
-        profile.email = instance.email
-        profile.save()
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender,instance,created,**kwargs):
+#     if created:
+#         profile = Profile.objects.create(owner=instance)
+#         # assigning the newly created user username and email 
+#         # to profile fields
+#         profile.first_name = instance.username
+#         profile.email = instance.email
+#         profile.save()
 
-@receiver(post_save,sender=Profile)
-def updating_user_profile(sender,instance,**kwargs):
-        user_instance = instance.owner
-        user_instance.email = instance.email
-        user_instance.save()
+# @receiver(post_save,sender=Profile)
+# def updating_user_profile(sender,instance, created, **kwargs):
+#         if not created:
+#             user_instance = instance.owner
+#             user_instance.email = instance.email
+#             user_instance.save()
 
 
 
