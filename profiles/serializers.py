@@ -12,6 +12,7 @@ from .models import Profile
 class ProfileBaseSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     role = serializers.ReadOnlyField()
+    role_selected = serializers.ReadOnlyField()
 
     class Meta:
         model = Profile
@@ -20,4 +21,7 @@ class ProfileBaseSerializer(serializers.ModelSerializer):
             'email', 'bio', 'role', 'created_on', 'updated_on',
             'image', 'role_selected'
             ]
+        
+
+
 
