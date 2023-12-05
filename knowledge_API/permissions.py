@@ -19,5 +19,12 @@ class CanSetRole(permissions.BasePermission):
 
     def has_permission(self, request, view):
         profile = request.user.profile
-        print(f"User: {request.user}, Profile Role: {profile.role}")
+        print(f"User: {request.user}, Profile Role: {profile.role}"
+        )
         return not profile.role
+    
+class RoleOnProfileIsSet(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        profile = request.user.profile
+        return profile.role_selected

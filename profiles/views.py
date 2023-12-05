@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Profile
 from .serializers import ProfileBaseSerializer,RoleSelectionSerializer
 # from profiles import serializers
-from knowledge_API.permissions import CanSetRole, IsOwnerOrReadOnly,CanSetRole
+from knowledge_API.permissions import CanSetRole, IsOwnerOrReadOnly,CanSetRole,RoleOnProfileIsSet
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 @api_view(['GET','PUT'])
@@ -36,7 +36,6 @@ def set_role_view(request):
     if serializer.is_valid():
         role = serializer.validated_data['role']
         profile.role = role
-        profile.rolle_selected = True
         profile.save()
         return Response({'detail': 'Role set successfully'}, status=status.HTTP_200_OK)
     
@@ -54,7 +53,7 @@ class ProfileList(APIView):
     
 class ProfileDetail(APIView):
     serializer_class = ProfileBaseSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [RoleOnProfileIsSet,IsOwnerOrReadOnly]
     def get_object(self, pk):
         try:
             profile = Profile.objects.get(pk=pk)

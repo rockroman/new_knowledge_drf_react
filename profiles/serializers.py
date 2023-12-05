@@ -31,7 +31,6 @@ class ProfileBaseSerializer(serializers.ModelSerializer):
 
 class RoleSelectionSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(choices=Profile.ROLE)
-    # role = serializers.MultipleChoiceField(choices=['Mentor', 'Student'])
 
     class Meta:
         model = Profile
