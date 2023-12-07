@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     # apps
     'profiles',
     'lessons',
+    'inbox',
 ]
 
 MIDDLEWARE = [

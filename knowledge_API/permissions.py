@@ -1,6 +1,7 @@
 # Imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 3rd party:
+import profile
 from rest_framework import permissions
 
 
@@ -13,7 +14,12 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return obj.owner == request.user
+        # Check if the object has 'owner' attribute
+        if hasattr(obj, 'owner') and obj.owner == request.user:
+            return True
+        # Check if the object has 'author' attribute
+        elif hasattr(obj, 'author') and obj.author == request.user:
+            return True
     
 class CanSetRole(permissions.BasePermission):
 
@@ -26,5 +32,11 @@ class CanSetRole(permissions.BasePermission):
 class RoleOnProfileIsSet(permissions.BasePermission):
 
     def has_permission(self, request, view):
-        profile = request.user.profile
-        return profile.role_selected
+        # if not request.user:
+        #     profile = request.user.profile
+        #     return profile.role_selected
+        if request.user.is_authenticated:
+            profile = request.user.profile
+            return profile.role_selected
+        else:
+            return
