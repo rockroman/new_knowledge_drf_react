@@ -23,4 +23,6 @@ urlpatterns = [
     path('', include('profiles.urls')),
     path('', include('lessons.urls')),
     path('', include('inbox.urls')),
+    path('', include('comments.urls')),
+
 ]

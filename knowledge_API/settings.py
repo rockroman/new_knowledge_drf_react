@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'profiles',
     'lessons',
     'inbox',
+    'comments',
 ]
 
 MIDDLEWARE = [
