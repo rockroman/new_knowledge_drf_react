@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from inbox import serializers
+from knowledge_API.permissions import IsOwnerOrReadOnly, RoleOnProfileIsSet
 
 
 # Internal:
@@ -31,7 +32,7 @@ from profiles.serializers import ProfileBaseSerializer
 #     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated,RoleOnProfileIsSet])
 def inbox_view(request):
     
     user_conversations = Conversation.objects.filter(participants=request.user)
@@ -39,8 +40,9 @@ def inbox_view(request):
     return Response(serializer.data)
 
 
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 class ConversationDetailView(APIView):
+    permission_classes = [IsAuthenticated,RoleOnProfileIsSet]
     def get(self, request, conversation_id):
         conversation = get_object_or_404(Conversation, id=conversation_id, participants=request.user)
         messages_data = conversation.messages.all()

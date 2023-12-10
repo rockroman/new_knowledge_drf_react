@@ -10,6 +10,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics, filters
+from django.db.models import Count
 
 # Internal:
 from .models import Profile
@@ -42,38 +44,59 @@ def set_role_view(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProfileList(APIView):
-    """
-    listing all user profiles
-    """
-    def get(self, request):
-        profiles = Profile.objects.all()
-        serializer = ProfileBaseSerializer(profiles, many=True, context={'request':request})
-        return Response (serializer.data)
-    
-class ProfileDetail(APIView):
-    serializer_class = ProfileBaseSerializer
-    permission_classes = [RoleOnProfileIsSet,IsOwnerOrReadOnly]
-    def get_object(self, pk):
-        try:
-            profile = Profile.objects.get(pk=pk)
-            return profile
-        except Profile.DoesNotExist:
-            raise Http404
-        
-    def get(self, request, pk):
-        profile = self.get_object(pk)
-        self.check_object_permissions(self.request,profile)
-        serializer = ProfileBaseSerializer(profile, context={'request':request})
-        return Response(serializer.data)
-    
-    def put(self, request, pk):
-        profile = self.get_object(pk=pk)
-        serializer = ProfileBaseSerializer(profile, data=request.data, context={'request':request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+# class ProfileList(APIView):
+#     """
+#     listing all user profiles
+#     """
+#     def get(self, request):
+#         profiles = Profile.objects.all()
+#         serializer = ProfileBaseSerializer(profiles, many=True, context={'request':request})
+#         return Response (serializer.data)
 
+class ProfileList(generics.ListAPIView):
+    queryset = Profile.objects.annotate(
+        lessons_count = Count('owner__lesson',distinct=True)
+    ).order_by("-created_on")
+    serializer_class = ProfileBaseSerializer
+    filter_backends = [
+        filters.OrderingFilter
+    ]
+    ordering_fields = [
+        'lessons_count'
+    ]
+
+    
+# class ProfileDetail(APIView):
+#     serializer_class = ProfileBaseSerializer
+#     permission_classes = [RoleOnProfileIsSet,IsOwnerOrReadOnly]
+#     def get_object(self, pk):
+#         try:
+#             profile = Profile.objects.get(pk=pk)
+            
+#             return profile
+#         except Profile.DoesNotExist:
+#             raise Http404
+        
+#     def get(self, request, pk):
+#         profile = self.get_object(pk)
+#         self.check_object_permissions(self.request,profile)
+#         serializer = ProfileBaseSerializer(profile, context={'request':request})
+#         return Response(serializer.data)
+    
+#     def put(self, request, pk):
+#         profile = self.get_object(pk=pk)
+#         serializer = ProfileBaseSerializer(profile, data=request.data, context={'request':request})
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+
+
+class ProfileDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsOwnerOrReadOnly,RoleOnProfileIsSet]
+    queryset = Profile.objects.annotate(
+        lessons_count = Count('owner__lesson',distinct=True)
+    ).order_by("-created_on")
+    serializer_class = ProfileBaseSerializer
 
 

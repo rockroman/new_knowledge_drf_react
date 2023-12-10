@@ -12,9 +12,11 @@ from .models import Profile
 
 class ProfileBaseSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
+    first_name = serializers.ReadOnlyField()
     role = serializers.ReadOnlyField()
     role_selected = serializers.ReadOnlyField()
     is_owner = serializers.SerializerMethodField()
+    lessons_count = serializers.ReadOnlyField()
 
     def get_is_owner(self, obj):
         request = self.context['request']
@@ -25,7 +27,7 @@ class ProfileBaseSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'owner', 'first_name', 'last_name',
             'email', 'bio', 'role', 'created_on', 'updated_on',
-            'image', 'role_selected', 'is_owner'
+            'image', 'role_selected', 'is_owner', "lessons_count",
             ]
         
 
