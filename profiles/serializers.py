@@ -3,6 +3,8 @@
 # 3rd party:
 from random import choices
 from rest_framework import serializers
+from django.contrib.humanize.templatetags.humanize import naturaltime
+
 
 
 # Internal:
@@ -17,10 +19,24 @@ class ProfileBaseSerializer(serializers.ModelSerializer):
     role_selected = serializers.ReadOnlyField()
     is_owner = serializers.SerializerMethodField()
     lessons_count = serializers.ReadOnlyField()
+    created_on = serializers.SerializerMethodField()
+    updated_on = serializers.SerializerMethodField()
+
 
     def get_is_owner(self, obj):
         request = self.context['request']
         return request.user == obj.owner
+    
+
+    def get_created_on(self, obj):
+        return naturaltime(obj.created_on)
+
+    def get_updated_on(self, obj):
+        return naturaltime(obj.updated_on)
+    
+    
+
+
 
     class Meta:
         model = Profile

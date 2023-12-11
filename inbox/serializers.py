@@ -5,6 +5,7 @@ from dataclasses import field
 from pyexpat import model
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.contrib.humanize.templatetags.humanize import naturaltime
 
 
 # Internal:
@@ -37,11 +38,14 @@ class ConversationBaseSerializer(serializers.ModelSerializer):
 class InboxMessageSerializer(serializers.ModelSerializer):
     sender=serializers.ReadOnlyField(source="sender.owner.username")
     conversation = serializers.ReadOnlyField(source="conversation.id")
-    created_at = serializers.ReadOnlyField()
+    created_at = serializers.SerializerMethodField()
     # sender = serializers.ReadOnlyField()
     # sender = ProfileSerializer(read_only=True)
     # sender_name = serializers.ReadOnlyField(source="sender.owner.username")
 
+    def get_created_at(self, obj):
+        return naturaltime(obj.created_at)
+    
     class Meta:
         model = InboxMessage
         fields = [
