@@ -73,7 +73,7 @@ class LessonDetail(APIView):
     
 
 class LearningCategoryList(generics.ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly | permissions.IsAdminUser]
     serializer_class = LearningCategorySerializer 
     queryset = LearningCategory.objects.all().order_by('-created_at')   
 
