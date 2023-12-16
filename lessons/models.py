@@ -20,7 +20,8 @@ from profiles.models import Profile
 class LearningCategory(models.Model):
     owner =  models.ForeignKey(User, on_delete=models.PROTECT)
     name = models.CharField(max_length=50)
-    category_image = CloudinaryField('image', default='placeholder')
+    category_image = models.ImageField(upload_to="images/", default="/default_post_gfksyz",
+        blank=True)
     body = models.TextField()
     created_at = models.DateTimeField()
 

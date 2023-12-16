@@ -7,15 +7,15 @@ from multiprocessing import context
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status,permissions
+from rest_framework import status,permissions,generics
 from django.http import Http404
 
 import lessons
 
 
 # Internal:
-from .models import Lesson
-from .serializers import LessonsBaseSerializer
+from .models import LearningCategory, Lesson
+from .serializers import LessonsBaseSerializer,LearningCategorySerializer
 from lessons import serializers
 from knowledge_API.permissions import IsOwnerOrReadOnly, RoleOnProfileIsSet
 
@@ -70,6 +70,13 @@ class LessonDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class LearningCategoryList(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,permissions.IsAdminUser]
+    serializer_class = LearningCategorySerializer 
+    queryset = LearningCategory.objects.all().order_by('-created_at')   
+
 
 
 
