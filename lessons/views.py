@@ -47,32 +47,41 @@ class LessonsList(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
 
-class LessonDetail(APIView):
-    permission_classes = [IsOwnerOrReadOnly,RoleOnProfileIsSet]
-    serializer_class=LessonsBaseSerializer
-    def get_object(self,pk):
-        try:
-            lesson = Lesson.objects.get(pk=pk)
-            self.check_object_permissions(self.request,lesson)
-            self.check_permissions(self.request)
-            return lesson
-        except Lesson.DoesNotExist:
-            raise Http404
+# class LessonDetail(APIView):
+#     permission_classes = [IsOwnerOrReadOnly & RoleOnProfileIsSet | permissions.IsAuthenticatedOrReadOnly ]
+#     serializer_class=LessonsBaseSerializer
+#     def get_object(self,pk):
+#         try:
+#             lesson = Lesson.objects.get(pk=pk)
+#             self.check_object_permissions(self.request,lesson)
+#             self.check_permissions(self.request)
+#             return lesson
+#         except Lesson.DoesNotExist:
+#             raise Http404
         
-    def get(self, request, pk):
-        lesson = Lesson.objects.get(pk=pk)
-        serializer = LessonsBaseSerializer(lesson, context={'request':request})
-        return Response(serializer.data)
+#     def get(self, request, pk):
+#         lesson = Lesson.objects.get(pk=pk)
+#         serializer = LessonsBaseSerializer(lesson, context={'request':request})
+#         return Response(serializer.data)
     
-    def put(self,request,pk):
-        lesson = self.get_object(pk)
-        serializer = LessonsBaseSerializer(
-            lesson, data=request.data,context={'request':request}
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def put(self,request,pk):
+#         lesson = self.get_object(pk)
+#         serializer = LessonsBaseSerializer(
+#             lesson, data=request.data,context={'request':request}
+#         )
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class LessonDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class=LessonsBaseSerializer
+    permission_classes = [IsOwnerOrReadOnly & RoleOnProfileIsSet  ]
+    queryset = Lesson.objects.annotate(
+         comments_count=Count("comment", distinct=True),
+
+    )
+
     
 
 class LearningCategoryList(generics.ListCreateAPIView):
