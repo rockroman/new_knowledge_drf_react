@@ -16,7 +16,7 @@ from .serializers import CommentSerializer, CommentDetailSerializer
 
 class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,RoleOnProfileIsSet]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly | RoleOnProfileIsSet]
     queryset = Comment.objects.all()
 
     # associate user with comment
@@ -25,7 +25,10 @@ class CommentList(generics.ListCreateAPIView):
 
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsOwnerOrReadOnly,RoleOnProfileIsSet]
+    # combination of permissions is working but with "and" operator not or 
+    # operator
+    permission_classes = [IsOwnerOrReadOnly & RoleOnProfileIsSet | IsOwnerOrReadOnly]
+    # permission_classes = [IsOwnerOrReadOnly ]
     serializer_class = CommentDetailSerializer
     queryset = Comment.objects.all()
  

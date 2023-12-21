@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status,permissions,generics
 from django.http import Http404
+from django.db.models import Count
 
 import lessons
 
@@ -25,7 +26,9 @@ class LessonsList(APIView):
     serializer_class=LessonsBaseSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self,request):
-        lessons = Lesson.objects.all()
+        lessons = Lesson.objects.all().annotate(
+           comments_count=Count("comment", distinct=True) 
+        )
 
         serializer = LessonsBaseSerializer(lessons,many=True, context={'request':request})
         return Response (serializer.data)

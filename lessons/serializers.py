@@ -20,6 +20,7 @@ class LessonsBaseSerializer(serializers.ModelSerializer):
     profile_image = serializers.ReadOnlyField(source="author.profile.image.url")
     created_at = serializers.SerializerMethodField()
     updated_at = serializers.SerializerMethodField()
+    comments_count = serializers.ReadOnlyField()
 
     def validate_image(self,value):
         if value.size > 1024 * 1024 * 2:
@@ -57,7 +58,7 @@ class LessonsBaseSerializer(serializers.ModelSerializer):
             "id","author","is_owner","profile_id","profile_image",
             "category","title","content","image",
             "external_resources","learning_instructions", "created_at",
-            "updated_at"
+            "updated_at","comments_count",
            
         ]
 
