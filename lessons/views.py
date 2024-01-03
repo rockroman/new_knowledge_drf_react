@@ -7,7 +7,8 @@ from multiprocessing import context
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status,permissions,generics
+from rest_framework import status,permissions,generics,filters
+from django_filters.rest_framework import DjangoFilterBackend
 from django.http import Http404
 from django.db.models import Count
 
@@ -22,29 +23,53 @@ from knowledge_API.permissions import IsOwnerOrReadOnly, RoleOnProfileIsSet
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-class LessonsList(APIView):
-    serializer_class=LessonsBaseSerializer
+# trying to apply filters
+class LessonsList(generics.ListCreateAPIView):
+    serializer_class = LessonsBaseSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get(self,request):
-        lessons = Lesson.objects.all().annotate(
-           comments_count=Count("comment", distinct=True) 
-        )
+    queryset = Lesson.objects.annotate(
+        comments_count=Count("comment", distinct=True)
+    ).order_by("-created_at")
 
-        serializer = LessonsBaseSerializer(lessons,many=True, context={'request':request})
-        return Response (serializer.data)
-    
-    def post(self,request):
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ["title", "author__username"]
+
+    def post(self, request):
         if request.user.profile.role != 'Mentor':
             return Response({'detail': 'Only mentors can create lessons.'}, status=status.HTTP_403_FORBIDDEN)
-        
-        
-        serializer = LessonsBaseSerializer(
-            data=request.data, context={'request':request}
-        )
+
+        serializer = LessonsBaseSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(author=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# working code 
+# class LessonsList(APIView):
+#     serializer_class=LessonsBaseSerializer
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+#     def get(self,request):
+#         lessons = Lesson.objects.all().annotate(
+#            comments_count=Count("comment", distinct=True) 
+#         )
+
+#         serializer = LessonsBaseSerializer(lessons,many=True, context={'request':request})
+#         return Response (serializer.data)
+    
+#     def post(self,request):
+#         if request.user.profile.role != 'Mentor':
+#             return Response({'detail': 'Only mentors can create lessons.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        
+#         serializer = LessonsBaseSerializer(
+#             data=request.data, context={'request':request}
+#         )
+#         if serializer.is_valid():
+#             serializer.save(author=request.user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
 
 # class LessonDetail(APIView):
@@ -76,7 +101,7 @@ class LessonsList(APIView):
     
 class LessonDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class=LessonsBaseSerializer
-    permission_classes = [IsOwnerOrReadOnly & RoleOnProfileIsSet  ]
+    permission_classes = [IsOwnerOrReadOnly & RoleOnProfileIsSet]
     queryset = Lesson.objects.annotate(
          comments_count=Count("comment", distinct=True),
 
