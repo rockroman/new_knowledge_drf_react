@@ -20,13 +20,8 @@ class Conversation(models.Model):
 
     class Meta:
         ordering = ["-latest_message"]
-
-    # def __str__(self) -> str:
-    #      return f'[{self.participants.username}]'
     
     def __str__(self) -> str:
-        # user_data=serialize('json', self.participants.all(), fields=('id', 'username'))
-        # user_names = json.loads(user_data)
         user_names = ",".join(user.username for user in self.participants.all())
         return f'[{user_names}]'
     def participants_list(self):

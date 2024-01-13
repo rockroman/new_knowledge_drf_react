@@ -1,15 +1,127 @@
-asgiref==3.7.2
-cloudinary==1.37.0
-dj-database-url==0.5.0
-Django==4.2.8
-django-allauth==0.54.0
-django-cloudinary-storage==0.3.0
-django-crispy-forms==1.14.0
-django-summernote==0.8.20.0
-gunicorn==20.1.0
-oauthlib==3.2.2
-psycopg2==2.9.9
-PyJWT==2.8.0
-python3-openid==3.2.0
-requests-oauthlib==1.3.1
-sqlparse==0.4.4
+
+    "count": 8,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 76,
+            "owner": "Tester_student",
+            "first_name": "Tester_student",
+            "last_name": "",
+            "email": "",
+            "bio": "",
+            "role": "Student",
+            "created_on": "6 days, 1 hour ago",
+            "updated_on": "6 days, 1 hour ago",
+            "image": "https://res.cloudinary.com/di0onpbp0/image/upload/v1/media/images/default_profile_gwcpmq",
+            "role_selected": true,
+            "is_owner": false,
+            "lessons_count": 0
+        },
+        {
+            "id": 75,
+            "owner": "Miki2",
+            "first_name": "Miki2",
+            "last_name": "",
+            "email": "",
+            "bio": "",
+            "role": "Student",
+            "created_on": "1 week, 3 days ago",
+            "updated_on": "1 week, 3 days ago",
+            "image": "https://res.cloudinary.com/di0onpbp0/image/upload/v1/media/images/default_profile_gwcpmq",
+            "role_selected": true,
+            "is_owner": false,
+            "lessons_count": 0
+        },
+        {
+            "id": 74,
+            "owner": "miki1",
+            "first_name": "miki1",
+            "last_name": "",
+            "email": "",
+            "bio": "",
+            "role": "Mentor",
+            "created_on": "1 week, 3 days ago",
+            "updated_on": "1 week, 3 days ago",
+            "image": "https://res.cloudinary.com/di0onpbp0/image/upload/v1/media/images/default_profile_gwcpmq",
+            "role_selected": true,
+            "is_owner": false,
+            "lessons_count": 1
+        },
+        {
+            "id": 73,
+            "owner": "Miki",
+            "first_name": "Miki",
+            "last_name": "",
+            "email": "",
+            "bio": "",
+            "role": "Mentor",
+            "created_on": "1 week, 3 days ago",
+            "updated_on": "1 week, 3 days ago",
+            "image": "https://res.cloudinary.com/di0onpbp0/image/upload/v1/media/images/default_profile_gwcpmq",
+            "role_selected": true,
+            "is_owner": false,
+            "lessons_count": 0
+        },
+        {
+            "id": 35,
+            "owner": "Una",
+            "first_name": "Una",
+            "last_name": "",
+            "email": "",
+            "bio": "",
+            "role": "Mentor",
+            "created_on": "1 week, 6 days ago",
+            "updated_on": "1 week, 6 days ago",
+            "image": "https://res.cloudinary.com/di0onpbp0/image/upload/v1/media/images/default_profile_gwcpmq",
+            "role_selected": true,
+            "is_owner": false,
+            "lessons_count": 0
+        },
+        {
+            "id": 7,
+            "owner": "Tara",
+            "first_name": "Tara",
+            "last_name": "test",
+            "email": "ewrwer@bo.com",
+            "bio": "Like this is my Bio",
+            "role": "Student",
+            "created_on": "3 weeks, 4 days ago",
+            "updated_on": "3 weeks, 4 days ago",
+            "image": "https://res.cloudinary.com/di0onpbp0/image/upload/v1/media/images/default_profile_gwcpmq",
+            "role_selected": true,
+            "is_owner": false,
+            "lessons_count": 0
+        },
+        {
+            "id": 6,
+            "owner": "Roman",
+            "first_name": "Roman",
+            "last_name": "",
+            "email": "admin@bo.com",
+            "bio": "",
+            "role": "Mentor",
+            "created_on": "3 weeks, 5 days ago",
+            "updated_on": "3 weeks, 4 days ago",
+            "image": "https://res.cloudinary.com/di0onpbp0/image/upload/v1/media/images/default_profile_gwcpmq",
+            "role_selected": true,
+            "is_owner": false,
+            "lessons_count": 1
+        },
+        {
+            "id": 1,
+            "owner": "admin",
+            "first_name": "admin",
+            "last_name": "",
+            "email": "admin@bo.com",
+            "bio": "",
+            "role": "Mentor",
+            "created_on": "4 weeks ago",
+            "updated_on": "2 hours ago",
+            "image": "https://res.cloudinary.com/di0onpbp0/image/upload/v1/media/images/default_profile_gwcpmq",
+            "role_selected": true,
+            "is_owner": false,
+            "lessons_count": 0
+        }
+    ]
+}

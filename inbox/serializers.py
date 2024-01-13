@@ -14,19 +14,23 @@ from profiles.models import Profile
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class UserSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField()
+    id = serializers.ReadOnlyField()
     class Meta:
         model = User
         fields = ['id', 'username']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Profile
         fields = ['id',"owner"]
 
 
 class ConversationBaseSerializer(serializers.ModelSerializer):
-    participants = UserSerializer(many=True, read_only=True)
+    # participants = UserSerializer(many=True, read_only=True)
+    participants = UserSerializer(many=True)
 
 
     class Meta:
