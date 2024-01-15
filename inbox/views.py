@@ -17,6 +17,7 @@ from knowledge_API.permissions import IsOwnerOrReadOnly, RoleOnProfileIsSet
 from django.db.models import Q
 from django.db.models import Case, When, Value, IntegerField
 from django.db.models.functions import Lower
+from django.db.models import Count
 
 
 # Internal:
@@ -62,12 +63,24 @@ class InboxView(generics.ListCreateAPIView):
 
         # Get or create a conversation with the current user and the other participant
         print("current user before con exists check", self.request.user)
-        existing_conversation = Conversation.objects.filter(participants__username=other_participant_username,participants=request.user)
-        print(existing_conversation,"filtering existing conv")
-        print(Conversation.objects.all())
-        if existing_conversation.exists():
+        # working code
+        # existing_conversation = Conversation.objects.filter(participants__username=other_participant_username,participants=request.user)
+        # print(existing_conversation,"filtering existing conv")
+        # print(Conversation.objects.all())
+        # end of working code
+
+        # new code
+        existing_conversation = Conversation.objects.filter(participants__username=other_participant_username)
+        existing_conversation = existing_conversation.filter(participants=request.user)
+        existing_conversation = existing_conversation.annotate(participant_count=Count('participants'))
+
+        if existing_conversation.filter(participant_count=len(participants_data)).exists():
+            # Return the existing conversation without creating a new one
             serializer = ConversationBaseSerializer(existing_conversation.first(), context={'request': request})
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({'message': 'Conversation already exists'}, status=status.HTTP_200_OK)
+        # if existing_conversation.exists():
+        #     serializer = ConversationBaseSerializer(existing_conversation.first(), context={'request': request})
+        #     return Response(serializer.data, status=status.HTTP_200_OK)
 
         new_conversation = Conversation.objects.create()
         try:
