@@ -93,7 +93,7 @@ class ProfileList(generics.ListAPIView):
 
 
 class ProfileDetail(generics.RetrieveUpdateAPIView):
-    permission_classes = [IsOwnerOrReadOnly,RoleOnProfileIsSet]
+    permission_classes = [IsOwnerOrReadOnly]
     queryset = Profile.objects.annotate(
         lessons_count = Count('owner__lesson',distinct=True)
     ).order_by("-created_on")
