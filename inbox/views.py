@@ -106,7 +106,7 @@ class ConversationDetailView(APIView):
     permission_classes = [IsAuthenticated,RoleOnProfileIsSet]
     def get(self, request, conversation_id):
         conversation = get_object_or_404(Conversation, id=conversation_id, participants=request.user)
-        messages_data = conversation.messages.all()
+        messages_data = conversation.messages.all().order_by("created_at")
         for message in messages_data:
             if message.sender != request.user.profile:
                 message.seen = True

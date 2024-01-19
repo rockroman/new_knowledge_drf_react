@@ -36,7 +36,7 @@ class InboxMessage(models.Model):
     seen = models.BooleanField(default=False)
 
     class Meta:
-        ordering=["-created_at"]
+        ordering=["created_at"]
     
     def __str__(self) -> str:
         return f'{ self.sender.owner}'
